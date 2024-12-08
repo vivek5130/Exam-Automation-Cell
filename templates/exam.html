@@ -43,7 +43,7 @@
         }
     </style>
 </head>
-<body>
+<!-- <body>
     <h1>{{ subject }} Exam</h1>
     <form method="POST">
         {% for question in questions %}
@@ -64,5 +64,31 @@
         {% endfor %}
         <button type="submit">Submit</button>
     </form>
+</body> -->
+
+<body>
+    <h1>Exam: {{ subject }}</h1>
+
+    {% if questions %}
+        <form action="/exam/{{ subject }}" method="POST">
+            {% for q in questions %}
+                <div>
+                    <h3>{{ loop.index }}. {{ q.question }}</h3>
+                    {% set outer_index = loop.index %}
+                    {% for option in q.options %}
+                        <label>
+                            <input type="radio" name="q{{ outer_index }}" value="{{ option.split(')')[0] }}" required>
+                            {{ option }}
+                        </label><br>
+                    {% endfor %}
+                </div>
+                <hr>
+            {% endfor %}
+            <button type="submit">Submit</button>
+        </form>
+    {% else %}
+        <p>No questions available. Please try again later.</p>
+    {% endif %}
 </body>
+
 </html>
