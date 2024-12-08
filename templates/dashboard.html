@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Automation Dashboard</title>
+    <style>
+        /* Reset some basic styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
+}
+
+.navbar .logo h1 {
+    font-size: 24px;
+}
+
+.navbar .nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.navbar .nav-links a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Body */
+.dashboard-body {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100vh - 80px); /* Adjust to fit remaining space after navbar */
+}
+
+.subject-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.subject-selection label {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.subject-selection select {
+    padding: 10px;
+    font-size: 16px;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.subject-selection button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.subject-selection button:hover {
+    background-color: #0056b3;
+}
+
+/* Stats Section */
+.stats {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stats h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.stat-item strong {
+    font-weight: bold;
+}
+
+.stat-item p {
+    margin: 0;
+}
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        <h1>Exam Automation</h1>
+    </div>
+    <div class="nav-links">
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<!-- Dashboard Body -->
+<div class="dashboard-body">
+    <div class="subject-selection">
+        <label for="subject">Select Subject:</label>
+        <select id="subject" name="subject">
+            <option value="math">Mathematics</option>
+            <option value="science">Science</option>
+            <option value="history">History</option>
+            <!-- Add more subjects dynamically from the backend -->
+        </select>
+        <button onclick="startExam()">Start Exam</button>
+    </div>
+
+    <div class="stats">
+        <h3>Statistics</h3>
+        <div class="stat-item">
+            <p><strong>CGPA:</strong> 8.5</p>
+        </div>
+        <div class="stat-item">
+            <p><strong>Tests Attempted:</strong> 5</p>
+        </div>
+        <div class="stat-item">
+            <p><strong>Tests Passed:</strong> 3</p>
+        </div>
+        <div class="stat-item">
+            <p><strong>Tests Failed:</strong> 2</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function startExam() {
+        const subject = document.getElementById('subject').value;
+        window.location.href = `/exam/${subject}`;  // Redirect to the exam page
+    }
+</script>
+
+</body>
+</html>
