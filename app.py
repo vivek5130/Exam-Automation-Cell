@@ -2,11 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 import MySQLdb.cursors
 import re;
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+import os
+# from flask_sqlalchemy import SQLAlchemy
+# from werkzeug.security import generate_password_hash, check_password_hash
 # from transformers import pipeline
 import textdistance
 
+load_dotenv()
 app = Flask(__name__)
 
 # app.secret_key = 'your_secret_key'
@@ -15,10 +18,11 @@ app = Flask(__name__)
 
 #Mysql
 app.secret_key = 'your secret key'
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'vivek5926'
-app.config['MYSQL_DB'] = 'miniproject'
+app.config['MYSQL_HOST'] = os.getenv('HOST')
+app.config['MYSQL_USER'] = os.getenv('USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('PASSWORD')
+app.config['MYSQL_DB'] = os.getenv('DATABASE')
+
  
 mysql = MySQL(app)
 
