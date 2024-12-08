@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject }} Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ subject }} Exam</h1>
+    <form method="POST">
+        {% for question in questions %}
+        <div class="question">
+            <p><strong>Q{{ loop.index }}:</strong> {{ question.text }}</p>
+            <div class="options">
+                {% if question.type == 'MCQ' %}
+                {% for option in question.options %}
+                <label>
+                    <input type="radio" name="{{ question.id }}" value="{{ option }}"> {{ option }}
+                </label>
+                {% endfor %}
+                {% else %}
+                <textarea name="{{ question.id }}" rows="4" cols="50" placeholder="Write your answer here"></textarea>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

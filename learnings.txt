@@ -1,0 +1,4 @@
+pip install flask flask-mysqldb python-dotenv
+pip install -q -U google-generativeai
+to run type the following command in terminal python app.py
+

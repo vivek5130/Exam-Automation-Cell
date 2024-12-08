@@ -87,29 +87,34 @@ def dashboard():
     subjects = ['Math', 'Science', 'History']  # Replace with dynamic data if needed
     return render_template('dashboard.html', subjects=subjects)
 
-# @app.route('/exam/<subject>', methods=['GET', 'POST'])
-# def exam(subject):
-#     if request.method == 'POST':
-#         answers = request.form.to_dict()
-#         total_score = 0
-#         for question_id, answer in answers.items():
-#             question = Question.query.get(int(question_id))
-#             if question.question_type == 'MCQ':
-#                 if answer.strip().lower() == question.correct_answer.strip().lower():
-#                     score = 1  # Full score for correct MCQ
-#                 else:
-#                     score = 0
-#             else:  # Descriptive
-#                 score = evaluate_descriptive_answer(answer, question.correct_answer)
-#             total_score += score
-#             new_answer = Answer(user_id=session['user_id'], question_id=question.id, answer_text=answer, score=score)
-#             db.session.add(new_answer)
-#         db.session.commit()
-#         return redirect(url_for('result', score=total_score))
+#---------------------------------------------------
 
-#     # Fetch questions using Gemini API (Mocked for now)
-#     questions = Question.query.filter_by(subject=subject).all()
-#     return render_template('exam.html', questions=questions)
+import google.generativeai as genai
+import requests 
+
+genai.configure(api_key= os.getenv('API_KEY'))
+model = genai.GenerativeModel("gemini-1.5-flash")
+# response = model.generate_content("generate upto 10 questions on maths with options")
+# print(response.text)
+
+
+@app.route('/exam/<subject>', methods=['GET', 'POST'])
+def exam(subject):
+    if request.method == 'GET':
+        prompt = f"Generate 5 exam questions on the topic of {subject}."
+        response = model.generate_content(prompt)
+
+        # Extract and structure the questions
+        if response and response.text:
+            print(response)
+            questions = [q.strip() for q in response.text.split('\n') if q.strip()]
+        else:
+            questions = []  # Handle API failure gracefully
+
+        return render_template('exam.html', subject=subject, questions=questions)
+
+    # POST logic (e.g., handle form submission for answers)
+    return redirect(url_for('dashboard'))  # Temporary redirect after POST
 
 # @app.route('/result')
 # def result():
