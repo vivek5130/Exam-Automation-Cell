@@ -29,7 +29,7 @@ mysql = MySQL(app)
 # Routes
 @app.route('/')
 def home():
-    if session['loggedin'] == True:
+    if session.get('loggedin', True):
         return redirect(url_for('dashboard'))
     return redirect(url_for('login'))
 

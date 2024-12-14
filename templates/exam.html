@@ -8,11 +8,39 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f7fa;
-            padding: 20px;
+            /* padding: 20px; */
+            margin: 0px;
         }
 
         h1 {
             color: #007bff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .header .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .header .exit-button {
+            background-color: #ff4747;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .header .exit-button:hover {
+            background-color: #ff2a2a;
         }
 
         .question {
@@ -41,32 +69,19 @@
         button:hover {
             background-color: #0056b3;
         }
+        .exam-section{
+            margin:20px;
+        }
     </style>
 </head>
-<!-- <body>
-    <h1>{{ subject }} Exam</h1>
-    <form method="POST">
-        {% for question in questions %}
-        <div class="question">
-            <p><strong>Q{{ loop.index }}:</strong> {{ question.text }}</p>
-            <div class="options">
-                {% if question.type == 'MCQ' %}
-                {% for option in question.options %}
-                <label>
-                    <input type="radio" name="{{ question.id }}" value="{{ option }}"> {{ option }}
-                </label>
-                {% endfor %}
-                {% else %}
-                <textarea name="{{ question.id }}" rows="4" cols="50" placeholder="Write your answer here"></textarea>
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
-</body> -->
+
 
 <body>
+    <div class="header">
+        <div class="logo">Exam Automation</div>
+        <button class="exit-button" onclick="window.location.href='/';">Exit</button>
+    </div>
+    <section class = "exam-section">
     <h1>Exam: {{ subject }}</h1>
 
     {% if questions %}
@@ -89,6 +104,7 @@
     {% else %}
         <p>No questions available. Please try again later.</p>
     {% endif %}
+</section>
 </body>
 
 </html>
