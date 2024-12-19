@@ -1,110 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ subject }} Exam</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Test Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fa;
-            /* padding: 20px; */
-            margin: 0px;
-        }
-
-        h1 {
-            color: #007bff;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-        }
-
-        .header .logo {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .header .exit-button {
-            background-color: #ff4747;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .header .exit-button:hover {
-            background-color: #ff2a2a;
-        }
-
-        .question {
-            margin-bottom: 20px;
-        }
-
-        .question p {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .options label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-        .exam-section{
-            margin:20px;
-        }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+      }
+      .logo {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .exit-button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .exit-button:hover {
+        background-color: #d32f2f;
+      }
+      .exam-section {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      h3 {
+        font-size: 18px;
+      }
+      label {
+        font-size: 16px;
+      }
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      hr {
+        border: 1px solid #f0f0f0;
+        margin: 20px 0;
+      }
+      .tracker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 20px;
+      }
+      .tracker button {
+        width: 40px;
+        height: 40px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .tracker .not-attempted {
+        background-color: #d3d3d3;
+      }
+      .tracker .attempted {
+        background-color: #4caf50;
+        color: white;
+      }
+      .tracker .marked {
+        background-color: #ffa500;
+        color: white;
+      }
     </style>
-</head>
-
-
-<body>
+  </head>
+  <body>
     <div class="header">
-        <div class="logo">Exam Automation</div>
-        <button class="exit-button" onclick="window.location.href='/';">Exit</button>
+      <div class="logo">Exam Automation</div>
+      <button class="exit-button" onclick="window.location.href='/';">
+        Exit
+      </button>
     </div>
-    <section class = "exam-section">
-    <h1>Exam: {{ subject }}</h1>
+    <section class="exam-section">
+      <h1>Exam: {{ subject }}</h1>
 
-    {% if questions %}
-        <form action="/exam/{{ subject }}" method="POST">
-            {% for q in questions %}
-                <div>
-                    <h3>{{ loop.index }}. {{ q.question }}</h3>
-                    {% set outer_index = loop.index %}
-                    {% for option in q.options %}
-                        <label>
-                            <input type="radio" name="q{{ outer_index }}" value="{{ option.split(')')[0] }}" required>
-                            {{ option }}
-                        </label><br>
-                    {% endfor %}
-                </div>
-                <hr>
+      {% if questions %}
+      <form action="/exam/{{ subject }}" method="POST">
+        <div id="question-container">
+          {% for q in questions %}
+          <div
+            class="question"
+            data-index="{{ loop.index }}"
+            style="display: '{{ 'block' if loop.index == 1 else 'none' }}';"
+          >
+            <h3>{{ loop.index }}. {{ q.question }}</h3>
+            {% set outer_index = loop.index %} {% for option in q.options %}
+            <label>
+              <input
+                type="radio"
+                name="q{{ outer_index }}"
+                value="{{ option.split(')')[0] }}"
+              />
+              {{ option }} </label
+            ><br />
             {% endfor %}
-            <button type="submit">Submit</button>
-        </form>
-    {% else %}
-        <p>No questions available. Please try again later.</p>
-    {% endif %}
-</section>
-</body>
+            <div class="actions">
+              <button type="button" onclick="markForReview('{{ loop.index }}')">
+                Mark for Review
+              </button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="tracker">
+          {% for q in questions %}
 
+          <button
+            class="not-attempted"
+            id="tracker-{{ loop.index }}"
+            onclick="goToQuestion('{{ loop.index }}', event)"
+          >
+            {{ loop.index }}
+          </button>
+
+          {% endfor %}
+        </div>
+        <div class="navigation">
+          <button type="button" onclick="previousQuestion()">Previous</button>
+          <button type="button" onclick="nextQuestion()">Next</button>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+      {% else %}
+      <p>No questions available. Please try again later.</p>
+      {% endif %}
+    </section>
+
+    <script>
+              let currentQuestion = 1;
+              const totalQuestions = '{{ questions | length }}';
+
+              function goToQuestion(index, event) {
+          if (event) {
+              event.preventDefault(); // Prevent form submission
+          }
+          document.querySelectorAll('.question').forEach((q) => {
+              q.style.display = 'none';
+          });
+          document.querySelector(`.question[data-index="${index}"]`).style.display = 'block';
+          currentQuestion = index;
+      }
+
+
+              function previousQuestion() {
+                  if (currentQuestion > 1) {
+                      goToQuestion(currentQuestion - 1);
+                  }
+              }
+
+              function nextQuestion() {
+                  if (currentQuestion < totalQuestions) {
+                      goToQuestion(currentQuestion + 1);
+                  }
+              }
+
+              function markForReview(index) {
+                  const trackerButton = document.getElementById(`tracker-${index}`);
+                  trackerButton.classList.remove('not-attempted', 'attempted');
+                  trackerButton.classList.add('marked');
+              }
+
+              document.querySelectorAll('input[type="radio"]').forEach((input) => {
+                  input.addEventListener('change', (e) => {
+                      const index = e.target.name.replace('q', '');
+                      const trackerButton = document.getElementById(`tracker-${index}`);
+                      trackerButton.classList.remove('not-attempted', 'marked');
+                      trackerButton.classList.add('attempted');
+                  });
+              });
+
+              goToQuestion(currentQuestion);
+    </script>
+  </body>
 </html>
